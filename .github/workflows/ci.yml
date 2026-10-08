@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: astral-sh/setup-uv@v10
+      - uses: astral-sh/setup-uv@v10.2.0
       # Same hooks as local pre-commit. Gitleaks runs in its own job against full history.
       - name: Run pre-commit hooks
         run: SKIP=gitleaks uvx pre-commit run --all-files --show-diff-on-failure
@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: astral-sh/setup-uv@v10
+      - uses: astral-sh/setup-uv@v10.2.0
       - name: Create CI environment file
         run: cp .env.example .env
       - name: Start database stack
