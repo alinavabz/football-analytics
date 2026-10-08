@@ -4,7 +4,6 @@ import psycopg
 from pymongo import MongoClient
 
 
-
 def test_postgres_answers():
     conn = psycopg.connect(
         host="localhost",
@@ -25,7 +24,6 @@ def test_mongo_answers():
         username=os.environ["MONGO_INITDB_ROOT_USERNAME"],
         password=os.environ["MONGO_INITDB_ROOT_PASSWORD"],
     )
-    result = client.admin.command('ping')
+    result = client.admin.command("ping")
     client.close()
     assert result["ok"] == 1
-

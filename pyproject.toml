@@ -9,5 +9,18 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "pre-commit>=4.6.2",
     "pytest>=9.1.1",
+    "ruff>=0.16.10",
 ]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+# E/W: style errors, F: real bugs (unused imports, undefined names), I: import order, B: common pitfalls
+select = ["E", "W", "F", "I", "B"]
