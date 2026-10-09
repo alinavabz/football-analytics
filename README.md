@@ -45,7 +45,7 @@ Architecture Decision Records live in [docs/adr/](docs/adr/):
 
 - [ADR-001: Raw data in MongoDB, modelled data in PostgreSQL](docs/adr/001-raw-in-mongodb-modelled-in-postgresql.md)
 
- Datasets other components depend on are described in [docs/data-contracts/](docs/data-contracts/).
+Datasets other components depend on are described in [docs/data-contracts/](docs/data-contracts/).
 
 ## Data
 
