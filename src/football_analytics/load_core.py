@@ -18,7 +18,7 @@ from pymongo.database import Database
 
 from football_analytics.config import MongoSettings, PostgresSettings
 
-SCHEMA_FILE = Path(__file__).resolve().parents[2] / "sql" / "001_core_schema.sql"
+SQL_DIR = Path(__file__).resolve().parents[2] / "sql"
 EVENT_BATCH_SIZE = 20_000
 
 log = logging.getLogger("football_analytics.load_core")
@@ -219,7 +219,9 @@ def event_player_rows(e: dict) -> list[tuple]:
 
 
 def apply_schema(conn: psycopg.Connection) -> None:
-    conn.execute(SCHEMA_FILE.read_text())
+    """Apply the numbered SQL files (001_..., 002_...) in order. Each is safe to re-run."""
+    for path in sorted(SQL_DIR.glob("[0-9][0-9][0-9]_*.sql")):
+        conn.execute(path.read_text())
 
 
 def upsert_rows(
