@@ -24,6 +24,14 @@ Measured on a laptop (Apple Silicon, Docker Desktop).
 | Relational load into PostgreSQL | 64 matches, 3,244 squad entries, 234,637 events, 1,494 shots, 68,515 passes; row counts reconciled with MongoDB |
 | Relational load time, first run / rerun | 10.3 s / 7.5 s |
 
+Query tuning ([details](docs/query-performance.md)), median of 25 runs:
+
+| Query | Before | After |
+|---|---|---|
+| Team shots and xG by match | 16.68 ms | 0.28 ms |
+| Player pass recipients | 10.16 ms | 1.06 ms |
+| Full load into an empty schema (cost of the two indexes) | 8.9 s | 9.9 s |
+
 ## Quick start
 
 Requires Docker and [uv](https://docs.astral.sh/uv/).

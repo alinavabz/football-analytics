@@ -1,4 +1,4 @@
-.PHONY: up down ps psql mongosh ingest load test lint format reset
+.PHONY: up down ps psql mongosh ingest load bench test lint format reset
 
 # Start Postgres and MongoDB, and wait until both pass their health checks
 up:
@@ -24,6 +24,10 @@ ingest:
 # Build the relational model in PostgreSQL (schema core) from the MongoDB raw store. Safe to rerun.
 load:
 	PYTHONPATH=src uv run --env-file .env python -m football_analytics.load_core
+
+# Time the analyst queries in sql/queries/ with EXPLAIN ANALYZE
+bench:
+	PYTHONPATH=src uv run --env-file .env python -m football_analytics.bench
 
 test:
 	uv run --env-file .env pytest

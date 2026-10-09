@@ -1,6 +1,9 @@
 services:
   postgres:
     image: postgres:16
+    # Planner cost of a random page read relative to a sequential one. The default (4.0) models
+    # spinning disks; 1.1 is the usual value for SSD storage. See docs/query-performance.md.
+    command: ["postgres", "-c", "random_page_cost=1.1"]
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}

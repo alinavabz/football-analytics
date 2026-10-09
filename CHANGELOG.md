@@ -5,6 +5,9 @@ All notable changes to this project are recorded here. Format based on [Keep a C
 ## [Unreleased]
 
 ### Added
+- Analyst queries in `sql/queries/` and `make bench`, which times them with EXPLAIN ANALYZE.
+- Indexes from measured plans (`sql/002_indexes.sql`): team-level and covering player-level composite indexes on `core.events`. `make load` now applies every numbered SQL file in order.
+- PostgreSQL `random_page_cost=1.1` for SSD storage. Query performance write-up in `docs/query-performance.md`.
 - Relational model in PostgreSQL (schema `core`): competitions, teams, players, matches, match squads, events, shots, passes, with keys and constraints.
 - `make load`: builds `core` from the MongoDB raw store in one transaction, merging by primary key and reconciling row counts with MongoDB.
 - ADR-001 on keeping raw data in MongoDB and modelled data in PostgreSQL. Data contract for `core`.
