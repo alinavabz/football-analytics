@@ -1,4 +1,4 @@
-.PHONY: up down ps psql mongosh ingest load bench test lint format reset
+.PHONY: up down ps psql mongosh ingest load bench dbt docs test lint format reset
 
 # Start Postgres and MongoDB, and wait until both pass their health checks
 up:
@@ -28,6 +28,15 @@ load:
 # Time the analyst queries in sql/queries/ with EXPLAIN ANALYZE
 bench:
 	PYTHONPATH=src uv run --env-file .env python -m football_analytics.bench
+
+# Build the dbt star schema (staging and marts) and run its tests, then check source freshness
+dbt:
+	cd dbt && uv run --env-file ../.env dbt build --profiles-dir .
+	cd dbt && uv run --env-file ../.env dbt source freshness --profiles-dir .
+
+# Generate dbt documentation with the lineage graph into dbt/target/
+docs:
+	cd dbt && uv run --env-file ../.env dbt docs generate --profiles-dir .
 
 test:
 	uv run --env-file .env pytest

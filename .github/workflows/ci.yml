@@ -43,6 +43,10 @@ jobs:
         run: uv sync --locked
       - name: Run tests
         run: make test
+      - name: Load World Cup 2022 into MongoDB and PostgreSQL
+        run: make ingest load
+      - name: Build and test the dbt star schema
+        run: make dbt
       - name: Show container logs on failure
         if: failure()
         run: docker compose logs

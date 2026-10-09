@@ -1,0 +1,13 @@
+# Connection settings come from the environment (.env locally, the CI job in GitHub Actions).
+football:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: "{{ env_var('POSTGRES_HOST', 'localhost') }}"
+      port: "{{ env_var('POSTGRES_PORT', '5432') | int }}"
+      user: "{{ env_var('POSTGRES_USER') }}"
+      password: "{{ env_var('POSTGRES_PASSWORD') }}"
+      dbname: "{{ env_var('POSTGRES_DB', env_var('POSTGRES_USER')) }}"
+      schema: analytics
+      threads: 4
