@@ -1,4 +1,4 @@
-.PHONY: up down ps test lint format reset
+.PHONY: up down ps psql mongosh ingest test lint format reset
 
 # Start Postgres and MongoDB, and wait until both pass their health checks
 up:
@@ -9,6 +9,17 @@ down:
 
 ps:
 	docker compose ps
+
+# Open a database shell, logging in with the credentials from .env
+psql:
+	docker compose exec postgres sh -c 'psql -U "$$POSTGRES_USER"'
+
+mongosh:
+	docker compose exec mongo sh -c 'mongosh -u "$$MONGO_INITDB_ROOT_USERNAME" -p "$$MONGO_INITDB_ROOT_PASSWORD"'
+
+# Load FIFA World Cup 2022 from StatsBomb open data into MongoDB. Safe to rerun.
+ingest:
+	PYTHONPATH=src uv run --env-file .env python -m football_analytics.ingest
 
 test:
 	uv run --env-file .env pytest
