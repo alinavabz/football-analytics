@@ -1,4 +1,4 @@
-.PHONY: up down ps psql mongosh ingest test lint format reset
+.PHONY: up down ps psql mongosh ingest load test lint format reset
 
 # Start Postgres and MongoDB, and wait until both pass their health checks
 up:
@@ -20,6 +20,10 @@ mongosh:
 # Load FIFA World Cup 2022 from StatsBomb open data into MongoDB. Safe to rerun.
 ingest:
 	PYTHONPATH=src uv run --env-file .env python -m football_analytics.ingest
+
+# Build the relational model in PostgreSQL (schema core) from the MongoDB raw store. Safe to rerun.
+load:
+	PYTHONPATH=src uv run --env-file .env python -m football_analytics.load_core
 
 test:
 	uv run --env-file .env pytest
