@@ -5,6 +5,8 @@ All notable changes to this project are recorded here. Format based on [Keep a C
 ## [Unreleased]
 
 ### Added
+- dbt project: staging views and a star schema in `marts` (`fact_shots`, `fact_events`, match, team, player, and date dimensions), 37 data tests including goal-to-scoreline reconciliation, and source freshness on `core.load_runs`. `make dbt`, `make docs`. CI loads the full dataset and runs `dbt build`.
+- ADR-002 and the `marts` data contract.
 - Analyst queries in `sql/queries/` and `make bench`, which times them with EXPLAIN ANALYZE.
 - Indexes from measured plans (`sql/002_indexes.sql`): team-level and covering player-level composite indexes on `core.events`. `make load` now applies every numbered SQL file in order.
 - PostgreSQL `random_page_cost=1.1` for SSD storage. Query performance write-up in `docs/query-performance.md`.
