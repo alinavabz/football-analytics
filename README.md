@@ -7,7 +7,7 @@ Analytics platform for football match event data. Raw [StatsBomb open data](http
 ```mermaid
 flowchart LR
     SB[StatsBomb open data<br/>nested JSON files] -->|make ingest| M[(MongoDB<br/>statsbomb_raw)]
-    M --> P[(PostgreSQL<br/>warehouse)]
+    M -->|make load| P[(PostgreSQL<br/>core schema)]
     P --> A[Analysis]
 ```
 
@@ -21,6 +21,8 @@ Measured on a laptop (Apple Silicon, Docker Desktop).
 | Load time, first run (downloads 192 MB of JSON) | 21.0 s |
 | Load time, rerun from local file cache | 15.0 s |
 | Documents after loading twice | Unchanged (idempotent reload) |
+| Relational load into PostgreSQL | 64 matches, 3,244 squad entries, 234,637 events, 1,494 shots, 68,515 passes; row counts reconciled with MongoDB |
+| Relational load time, first run / rerun | 10.3 s / 7.5 s |
 
 ## Quick start
 
@@ -31,6 +33,7 @@ cp .env.example .env   # set your own passwords
 make up                # start PostgreSQL and MongoDB
 uv sync                # install Python dependencies
 make ingest            # load World Cup 2022 into MongoDB
+make load              # build the PostgreSQL tables
 make test
 ```
 
