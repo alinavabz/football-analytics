@@ -29,6 +29,8 @@ make test
 | `make up` | Start the stack and wait until both databases are healthy |
 | `make down` | Stop and remove containers. Data volumes are kept |
 | `make ps` | Show running services |
+| `make psql` / `make mongosh` | Open a database shell, logged in with the credentials from `.env` |
+| `make ingest` | Load FIFA World Cup 2022 from StatsBomb into MongoDB. Safe to rerun |
 | `make test` | Run the test suite against the running stack |
 | `make lint` | Check style and common errors with ruff |
 | `make format` | Auto-format and fix what ruff can fix |
