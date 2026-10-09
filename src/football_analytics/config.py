@@ -3,7 +3,39 @@
 import os
 from dataclasses import dataclass
 
+import psycopg
 from pymongo import MongoClient
+
+
+@dataclass(frozen=True)
+class PostgresSettings:
+    host: str
+    port: int
+    user: str
+    password: str
+    dbname: str
+
+    @classmethod
+    def from_env(cls) -> "PostgresSettings":
+        user = os.environ["POSTGRES_USER"]
+        return cls(
+            host=os.environ.get("POSTGRES_HOST", "localhost"),
+            port=int(os.environ.get("POSTGRES_PORT", "5432")),
+            user=user,
+            password=os.environ["POSTGRES_PASSWORD"],
+            # The postgres image creates a database named after the user unless POSTGRES_DB is set.
+            dbname=os.environ.get("POSTGRES_DB", user),
+        )
+
+    def connect(self, dbname: str | None = None, **kwargs) -> psycopg.Connection:
+        return psycopg.connect(
+            host=self.host,
+            port=self.port,
+            user=self.user,
+            password=self.password,
+            dbname=dbname or self.dbname,
+            **kwargs,
+        )
 
 
 @dataclass(frozen=True)

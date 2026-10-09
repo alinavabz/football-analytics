@@ -19,6 +19,7 @@ cp .env.example .env          # then set your own passwords
 uv sync                       # install Python dependencies, including dev tools
 uv run pre-commit install     # run lint and secret scan before every commit
 make up                       # start Postgres and MongoDB
+make ingest && make load      # load the data
 make test
 ```
 
@@ -31,6 +32,7 @@ make test
 | `make ps` | Show running services |
 | `make psql` / `make mongosh` | Open a database shell, logged in with the credentials from `.env` |
 | `make ingest` | Load FIFA World Cup 2022 from StatsBomb into MongoDB. Safe to rerun |
+| `make load` | Build the PostgreSQL `core` tables from MongoDB. Safe to rerun |
 | `make test` | Run the test suite against the running stack |
 | `make lint` | Check style and common errors with ruff |
 | `make format` | Auto-format and fix what ruff can fix |

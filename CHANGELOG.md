@@ -5,6 +5,9 @@ All notable changes to this project are recorded here. Format based on [Keep a C
 ## [Unreleased]
 
 ### Added
+- Relational model in PostgreSQL (schema `core`): competitions, teams, players, matches, match squads, events, shots, passes, with keys and constraints.
+- `make load`: builds `core` from the MongoDB raw store in one transaction, merging by primary key and reconciling row counts with MongoDB.
+- ADR-001 on keeping raw data in MongoDB and modelled data in PostgreSQL. Data contract for `core`.
 - `make ingest`: loads a StatsBomb competition season (default FIFA World Cup 2022) into MongoDB as raw documents, with idempotent upserts keyed on StatsBomb IDs and a local file cache.
 - Data contract for the `statsbomb_raw` collections.
 - `make psql` and `make mongosh` open database shells using the credentials in `.env`.
