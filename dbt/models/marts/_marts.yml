@@ -1,0 +1,132 @@
+models:
+  - name: dim_team
+    description: One row per team.
+    columns:
+      - name: team_id
+        description: StatsBomb team id.
+        data_tests: [unique, not_null]
+      - name: team_name
+        data_tests: [not_null]
+
+  - name: dim_player
+    description: One row per player.
+    columns:
+      - name: player_id
+        description: StatsBomb player id.
+        data_tests: [unique, not_null]
+      - name: display_name
+        description: Nickname where StatsBomb has one (e.g. "Lionel Messi"), otherwise full name.
+        data_tests: [not_null]
+      - name: team_id
+        description: Team the player was named in a squad for. Null for players seen only in events.
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_team')
+                field: team_id
+
+  - name: dim_match
+    description: One row per match.
+    columns:
+      - name: match_id
+        data_tests: [unique, not_null]
+      - name: date_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date_key
+      - name: competition_stage
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [Group Stage, Round of 16, Quarter-finals, Semi-finals, 3rd Place Final, Final]
+      - name: stage_order
+        description: Sort order for competition_stage, group stage first.
+        data_tests: [not_null]
+
+  - name: dim_date
+    description: One row per calendar day from the first to the last match date.
+    columns:
+      - name: date_key
+        description: Date as an integer, YYYYMMDD.
+        data_tests: [unique, not_null]
+
+  - name: fact_shots
+    description: One row per shot, including penalty shootout kicks (filter is_shootout to exclude them).
+    columns:
+      - name: shot_id
+        description: Event id of the shot.
+        data_tests: [unique, not_null]
+      - name: match_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_match')
+                field: match_id
+      - name: team_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_team')
+                field: team_id
+      - name: player_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_player')
+                field: player_id
+      - name: date_key
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date_key
+      - name: xg
+        description: StatsBomb expected goals, the probability the shot is scored, 0 to 1.
+        data_tests: [not_null]
+      - name: period
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3, 4, 5]
+                quote: false
+      - name: is_goal
+        data_tests: [not_null]
+
+  - name: fact_events
+    description: One row per event (pass, carry, pressure, shot, ...).
+    columns:
+      - name: event_id
+        data_tests: [unique, not_null]
+      - name: match_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_match')
+                field: match_id
+      - name: team_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_team')
+                field: team_id
+      - name: player_id
+        description: Null for team-level events such as half start.
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_player')
+                field: player_id
+      - name: minute
+        description: Match clock minute. Extra time runs to about 120 plus stoppage.
+        data_tests:
+          - not_null
+      - name: is_pass_complete
+        description: True or false for passes, null for every other event type.

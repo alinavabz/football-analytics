@@ -33,6 +33,8 @@ make test
 | `make psql` / `make mongosh` | Open a database shell, logged in with the credentials from `.env` |
 | `make ingest` | Load FIFA World Cup 2022 from StatsBomb into MongoDB. Safe to rerun |
 | `make load` | Build the PostgreSQL `core` tables from MongoDB. Safe to rerun |
+| `make dbt` | Build and test the dbt star schema, then check source freshness |
+| `make docs` | Generate dbt documentation and lineage into `dbt/target/` |
 | `make bench` | Time the analyst queries in `sql/queries/` with EXPLAIN ANALYZE |
 | `make test` | Run the test suite against the running stack |
 | `make lint` | Check style and common errors with ruff |

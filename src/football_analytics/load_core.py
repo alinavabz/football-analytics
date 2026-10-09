@@ -14,6 +14,7 @@ from pathlib import Path
 
 import psycopg
 from psycopg import sql
+from psycopg.types.json import Jsonb
 from pymongo.database import Database
 
 from football_analytics.config import MongoSettings, PostgresSettings
@@ -299,7 +300,9 @@ def load_core(conn: psycopg.Connection, raw: Database) -> dict[str, int]:
         upsert_rows(conn, "shots", (shot_row(e) for e in batch if e["type"]["name"] == "Shot"))
         upsert_rows(conn, "passes", (pass_row(e) for e in batch if e["type"]["name"] == "Pass"))
 
-    return reconcile(conn, raw)
+    counts = reconcile(conn, raw)
+    conn.execute("INSERT INTO core.load_runs (row_counts) VALUES (%s)", [Jsonb(counts)])
+    return counts
 
 
 def reconcile(conn: psycopg.Connection, raw: Database) -> dict[str, int]:

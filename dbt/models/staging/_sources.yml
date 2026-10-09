@@ -1,0 +1,20 @@
+sources:
+  - name: core
+    description: Relational model loaded from the MongoDB raw store by `make load`. See docs/data-contracts/core-postgres.md.
+    schema: core
+    tables:
+      - name: load_runs
+        description: One row per completed load. Freshness of the whole source is judged from here.
+        config:
+          loaded_at_field: finished_at
+          freshness:
+            warn_after: {count: 30, period: day}
+            error_after: {count: 90, period: day}
+      - name: competitions
+      - name: teams
+      - name: players
+      - name: matches
+      - name: match_players
+      - name: events
+      - name: shots
+      - name: passes

@@ -8,7 +8,8 @@ Analytics platform for football match event data. Raw [StatsBomb open data](http
 flowchart LR
     SB[StatsBomb open data<br/>nested JSON files] -->|make ingest| M[(MongoDB<br/>statsbomb_raw)]
     M -->|make load| P[(PostgreSQL<br/>core schema)]
-    P --> A[Analysis]
+    P -->|make dbt| D[(PostgreSQL<br/>marts: star schema)]
+    D --> A[Analysis and reporting]
 ```
 
 ## Results
@@ -32,6 +33,8 @@ Query tuning ([details](docs/query-performance.md)), median of 25 runs:
 | Player pass recipients | 10.16 ms | 1.06 ms |
 | Full load into an empty schema (cost of the two indexes) | 8.9 s | 9.9 s |
 
+Star schema built with dbt: `fact_events` (234,637 rows, one per event), `fact_shots` (1,494, one per shot), and dimensions for match (64), team (32), player (829), and date. 51 models and tests pass in 1.6 s, including a check that goals counted from events equal the official score of all 64 matches.
+
 ## Quick start
 
 Requires Docker and [uv](https://docs.astral.sh/uv/).
@@ -42,6 +45,7 @@ make up                # start PostgreSQL and MongoDB
 uv sync                # install Python dependencies
 make ingest            # load World Cup 2022 into MongoDB
 make load              # build the PostgreSQL tables
+make dbt               # build and test the star schema
 make test
 ```
 
@@ -52,6 +56,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow and all `make` targ
 Architecture Decision Records live in [docs/adr/](docs/adr/):
 
 - [ADR-001: Raw data in MongoDB, modelled data in PostgreSQL](docs/adr/001-raw-in-mongodb-modelled-in-postgresql.md)
+- [ADR-002: dbt for the star schema](docs/adr/002-dbt-for-the-star-schema.md)
 
 Datasets other components depend on are described in [docs/data-contracts/](docs/data-contracts/).
 
