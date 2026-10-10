@@ -60,6 +60,10 @@ Architecture Decision Records live in [docs/adr/](docs/adr/):
 
 Datasets other components depend on are described in [docs/data-contracts/](docs/data-contracts/).
 
+## Operations
+
+Start, health checks, failure handling, and recovery: [docs/runbook.md](docs/runbook.md). Query tuning notes: [docs/query-performance.md](docs/query-performance.md).
+
 ## Data
 
 Match data is provided by [StatsBomb](https://statsbomb.com/) through its open data repository, under the StatsBomb open data licence.
